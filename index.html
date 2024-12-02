@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="mystyle.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <nav id="topNav">
+      <ul>
+        <li class="tn" id="tn1"><a href="#">Home</a></li>
+        <li class="tn" id="tn2"><a href="#">Players</a></li>
+        <li class="tn" id="tn3"><a href="#">BlogSpot</a></li>
+        <li class="tn" id="tn4"><a href="#">Contact Us</a></li>
+      </ul>
+    </nav>
+    <form action="myfav.php" method="post">
+      <label for="name">
+        <input type="text" name="name" class="infield" id="" />
+      </label>
+      <label for="email">
+        <input type="email" name="email" class="infield" id=""
+      /></label>
+      <button type="submit">Submit</button>
+    </form>
+
+    <table class="abc">
+      <thead>
+        <tr>
+          <th>Sno</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>John Doe</td>
+          <td>john99@gmail.com</td>
+          <td id="Act">
+            <button id="bt_edit">Edit</button>
+            <button id="bt_delete">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- this is the modal for editing the data -->
+    <div class="modal" id="mdledit">
+      <h4>Enter Details</h4>
+      <label for="newname">
+        <input type="text" id="newName" placeholder="Enter new Name"
+      /></label>
+      <label for="newPass"
+        ><input type="text" id="newPass" placeholder="Enter new email"
+      /></label>
+      <button id="btEditConfirm">Submit</button>
+    </div>
+    <!-- This is the modal for deleting the data -->
+    <div class="modal" id="mdldelete">
+      <h4>Are you sure, you want to delete the existing data?</h4>
+      <button id="btDeleteConfirm">Confirm</button>
+    </div>
+  </body>
+  <script src="script.js"></script>
+</html>

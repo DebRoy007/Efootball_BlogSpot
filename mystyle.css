@@ -1,0 +1,76 @@
+#topNav {
+  background-color: transparent;
+  padding: 15px 0;
+  text-align: center;
+  height: 20px;
+}
+
+#topNav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#topNav li {
+  display: inline-block;
+  margin: 0 20px;
+}
+
+#topNav a {
+  text-decoration: none;
+  color: #ffee54;
+  font-weight: 600;
+  font-variant: small-caps;
+  text-shadow: 0 0 10px #ff8c3b, 0 0 40px #ff8c3b, 0 0 80px #ff8c3b,
+    0 0 160px #ff8c3b, 0 0 240px #ff8c3b;
+}
+
+/* Optional: Hover effect */
+#topNav li a:hover {
+  text-decoration: underline;
+  color: white; /* Example hover color */
+}
+.abc {
+  background-color: aqua;
+  color: black;
+  border-collapse: collapse; /* Makes borders merge into a single line */
+  position: relative;
+  top: 120px;
+  left: 30px;
+  width: 34%;
+}
+.abc th,
+.abc td {
+  border: 1px solid #000; /* Adds a 1px solid border */
+  padding: 4px; /* Adds space inside cells */
+  text-align: center; /* Centers text */
+}
+
+.abc th {
+  background-color: #f2f2f2; /* Optional: Adds a background color to headers */
+}
+.abc #act {
+  flex-direction: row;
+  justify-items: space-around;
+}
+body {
+  background-image: url("images/wp13111912-efootball-2024-wallpapers.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+}
+.modal {
+  height: 120px;
+  width: 25%;
+  color: black;
+  background-color: white;
+  position: relative;
+  z-index: 1;
+  left: 30rem;
+}
+#mdledit {
+  display: none;
+}
+#mdldelete {
+  display: none;
+}
