@@ -15,17 +15,31 @@
         <li class="tn" id="tn4"><a href="#">Contact Us</a></li>
       </ul>
     </nav>
-    <form action="myfav.php" method="post">
-      <label for="name">
-        <input type="text" name="name" class="infield" id="" />
+    <form action="dataInsert.php" id="addDataForm" name="addData" method="post">
+      <label for="addName">
+        <input
+          type="text"
+          name="nameData"
+          class="infield"
+          id="addName"
+          required
+        />
       </label>
-      <label for="email">
-        <input type="email" name="email" class="infield" id=""
+      <label for="addEmail">
+        <input
+          type="email"
+          name="emailData"
+          id="addEmail"
+          class="infield"
+          required
       /></label>
-      <button type="submit">Submit</button>
+      <button id="bt_addData" type="submit">Submit</button>
     </form>
+    <div id="show_Data_Container">
+      <button id="show_Data">Show Table</button>
+    </div>
 
-    <table class="abc">
+    <table id="mytab" class="abc">
       <thead>
         <tr>
           <th>Sno</th>
@@ -35,15 +49,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>1</td>
-          <td>John Doe</td>
-          <td>john99@gmail.com</td>
-          <td id="Act">
-            <button id="bt_edit">Edit</button>
-            <button id="bt_delete">Delete</button>
-          </td>
-        </tr>
+        <!-- data will come dynamically -->
       </tbody>
     </table>
     <!-- this is the modal for editing the data -->
@@ -62,6 +68,6 @@
       <h4>Are you sure, you want to delete the existing data?</h4>
       <button id="btDeleteConfirm">Confirm</button>
     </div>
+    <script src="myScript.js"></script>
   </body>
-  <script src="script.js"></script>
 </html>
