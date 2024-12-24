@@ -69,15 +69,18 @@ body {
   z-index: 1;
   left: 30rem;
 }
-#mdledit {
+#mdl_Edit {
   display: none;
 }
-#mdldelete {
+#mdl_Delete {
   display: none;
 }
 #show_Data_Container {
-  height: 10px;
+  height: 20px;
   width: 100vw;
   display: flex;
   justify-content: center;
+}
+#show_Data {
+  height: 20px;
 }

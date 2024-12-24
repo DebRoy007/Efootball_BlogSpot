@@ -15,7 +15,8 @@
         <li class="tn" id="tn4"><a href="#">Contact Us</a></li>
       </ul>
     </nav>
-    <form action="dataInsert.php" id="addDataForm" name="addData" method="post">
+    <form id="addDataForm" name="addData" method="post">
+      <!-- Add this to directly ingest the data to the php script==> action="dataInsert.php" -->
       <label for="addName">
         <input
           type="text"
@@ -38,7 +39,6 @@
     <div id="show_Data_Container">
       <button id="show_Data">Show Table</button>
     </div>
-
     <table id="mytab" class="abc">
       <thead>
         <tr>
@@ -53,20 +53,32 @@
       </tbody>
     </table>
     <!-- this is the modal for editing the data -->
-    <div class="modal" id="mdledit">
-      <h4>Enter Details</h4>
-      <label for="newname">
-        <input type="text" id="newName" placeholder="Enter new Name"
-      /></label>
-      <label for="newPass"
-        ><input type="text" id="newPass" placeholder="Enter new email"
-      /></label>
-      <button id="btEditConfirm">Submit</button>
+    <div class="modal" id="mdl_Edit">
+      <form id="edit_Data_Form" action="">
+        <h4>Enter Details</h4>
+        <label for="new_Name">
+          <input
+            name="update_Name"
+            type="text"
+            id="new_Name"
+            placeholder="Enter new Name"
+        /></label>
+        <label for="new_Email"
+          ><input
+            type="email"
+            name="update_Email"
+            id="new_Email"
+            placeholder="Enter new email"
+        /></label>
+        <button type="submit" id="bt_Edit_Confirm">Submit</button>
+      </form>
     </div>
     <!-- This is the modal for deleting the data -->
-    <div class="modal" id="mdldelete">
-      <h4>Are you sure, you want to delete the existing data?</h4>
-      <button id="btDeleteConfirm">Confirm</button>
+    <div class="modal" id="mdl_Delete">
+      <form action="" id="delete_Data_Form">
+        <h4>Are you sure, you want to delete the existing data?</h4>
+        <button type="submit" id="btDeleteConfirm">Confirm</button>
+      </form>
     </div>
     <script src="myScript.js"></script>
   </body>

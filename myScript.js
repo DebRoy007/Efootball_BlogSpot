@@ -1,66 +1,14 @@
-// //adding event listening for the edit button open pop up
-// let a = document.getElementById("bt_edit");
-// function editPopupOpen() {
-//   document.getElementById("mdledit").style.display = "block";
-// }
-// a.addEventListener("click", editPopupOpen);
-
-// //adding event listening for the edit button close pop up
-// let b = document.getElementById("btEditConfirm");
-// function editPopupClose() {
-//   let userConfirm = confirm("Finalise submitting");
-//   if (userConfirm) {
-//     document.getElementById("mdledit").style.display = "none";
-//   } else {
-//     window.location.href = "index.html";
-//   }
-// }
-// b.addEventListener("click", editPopupClose);
-
-// //adding event listening for the delete button open pop up
-// let c = document.getElementById("bt_delete");
-// function deletePopupOpen() {
-//   document.getElementById("mdldelete").style.display = "block";
-// }
-// c.addEventListener("click", deletePopupOpen);
-
-// //adding event listening for delete button close pop up
-// let d = document.getElementById("btDeleteConfirm");
-// function deletePopupClose() {
-//   let userConfirm = confirm("Finalise submitting");
-//   if (userConfirm) {
-//     document.getElementById("mdldelete").style.display = "none";
-//   } else {
-//     window.location.href = "index.html";
-//   }
-// }
-// d.addEventListener("click", deletePopupClose);
-
-//  //add data to the table
-//  let sNo=0;
-//  let e = document.getElementById("bt_addData");
-//  function addTableData(name,email){
-//   let a = document.addData.addName.value;
-//   let b = document.addData.addEmail.value;
-//    let td1 = tr.appendChild(document.createElement('td'));
-//    let td2 = tr.appendChild(document.createElement('td'));
-//    let td3 = tr.appendChild(document.createElement('td'));
-//    let td4 = tr.appendChild(document.createElement('td'));
-
-//  }
-
-//adding data to the database-------->>>>>
-let x = document.getElementById("addDataForm");
-x.addEventListener("submit", function (e) {
-  e.preventDefault();
-  const newData = new FormData(e.target);
-  console.log("User-entered data:");
-
-  //for debugging purpose!!!!!!!!!!!!!!!!!!!!!!!!
+//adding data to the database--->>>
+document.getElementById("addDataForm").addEventListener("submit", function (e) {
+  //for debugging purpose!!!
   // newData.forEach((value, key) => {
   //   console.log(`${key}: ${value}`);
   // });
 
+  e.preventDefault();
+  const newData = new FormData(e.target);
+  console.log("User-entered data!!!");
+  //Sending Data to the server--->>>
   fetch("dataInsert.php", {
     method: "POST",
     body: newData,
@@ -74,54 +22,206 @@ x.addEventListener("submit", function (e) {
       return response.json();
     })
     .then((data) => {
-      alert("Data added successfully");
-      console.dir(data);
+      // For debugging purpose!!!
+      //console.dir(data);
+      alert(data.msg);
+
       setTimeout(() => {
         window.location.href = "index.html";
       }, 2000);
     })
     .catch((error) => {
-      console.log(
-        "Sorry, could not add data due to this error: " + error.message
-      );
+      alert("Sorry, could not add data due to this error: " + error.message);
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 2000);
     });
 });
 
-//showing data in the webpage-->>
-document.getElementById("show_Data").addEventListener("click", (elem) => {
-  const rndr = elem.target;
-
-  if (rndr.innerText == "Show Table") {
-    //load and render the data-->
-    fetch("dataShow.php")
-      .then((response) => {
-        if (!response.ok) {
-          return response.json().then((errorData) => {
-            throw new Error(JSON.stringify(errorData));
-          });
-        }
-        return response.json();
-      })
-      .then((data) => {
-        data.forEach((e) => {
-          var row = `<tr>
-           <td>${e[0]}</td>
-           <td>${e[1]}</td>
-           <td>${e[2]}</td>
-            <td class="Act">
-            <button class="bt_edit">Edit</button>
-            <button class="bt_delete">Delete</button>
+//A function to load the data to the webpage
+function loadData() {
+  fetch("dataShow.php")
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((errorData) => {
+          throw new Error(JSON.stringify(errorData));
+        });
+      }
+      return response.json();
+    })
+    .then((data) => {
+      //generating row for each data Object--->>>
+      data.forEach((e) => {
+        let row = `<tr>
+           <td class="sno_Dynamic">${e[0]}</td>
+           <td class="name_Dynamic">${e[1]}</td>
+           <td class="email_Dynamic">${e[2]}</td>
+            <td class="act">
+            <button class="bt_Edit">Edit</button>
+            <button class="bt_Delete">Delete</button>
           </td>
            </tr>`;
-          document.getElementById("mytab").querySelector("tbody").innerHTML +=
-            row;
-        });
-      })
-      .catch((error) => {
-        alert("Sorry, could not add data due to this error: " + error.message);
+        //Adding row by row to the Table--->>>
+        document.getElementById("mytab").querySelector("tbody").innerHTML +=
+          row;
       });
-    //fetch ends here!!!!!!
+      //renderring the modals for edit and delete buttons of each row
+      if (document.getElementById("mytab").querySelector("tbody").innerHTML) {
+        document
+          .getElementById("mytab")
+          .querySelector("tbody")
+          .addEventListener("click", (e) => {
+            // for debugging purpose!!!
+            // if (e.target) {
+            //   console.log("pappu");
+            // }
+            //Finding out the id of the targetted row--->>>
+            let rowID = e.target
+              .closest("tr")
+              .querySelector(".sno_Dynamic").innerText;
+            //Adding the edit Form--->>>
+            if (e.target.classList.contains("bt_Edit")) {
+              //Renderring the Edit Modal--->>>
+              document.getElementById("mdl_Edit").style.display = "block";
+              //Sending the data to the server for Updation--->>>
+              document
+                .getElementById("edit_Data_Form")
+                .addEventListener("submit", (elem) => {
+                  elem.preventDefault();
+                  const edit_Data = new FormData(elem.target);
+                  edit_Data.append("Sno", rowID);
+                  let userConfirm = confirm("Ensure Submission!!!");
+                  if (userConfirm) {
+                    //For debugging purpose!!!
+                    // edit_Data.entries().forEach(([key, value]) => {
+                    //   console.log(key + " " + value);
+                    // });
 
+                    //Debugger Fetch method!!!
+                    // fetch("dataUpdate.php", {
+                    //   method: "POST", // Use POST instead of PATCH for testing
+                    //   body: edit_Data,
+                    // })
+                    //   .then((response) => response.text()) // Get the raw response (not JSON)
+                    //   .then((data) => {
+                    //     console.log(data); // Log the raw response from PHP
+                    //     alert("Data sent successfully. Check console.");
+                    //   })
+                    //   .catch((error) => {
+                    //     alert("Error: " + error.message);
+                    //   });
+
+                    //Sending data to the Server--->>>
+                    fetch("dataUpdate.php", {
+                      method: "POST",
+                      body: edit_Data,
+                    })
+                      .then((response) => {
+                        if (!response.ok) {
+                          return response.json().then((errorData) => {
+                            throw new Error(JSON.stringify(errorData));
+                          });
+                        }
+                        return response.json();
+                      })
+                      .then((data) => {
+                        alert("Data Updated successfully" + data.msg);
+                        setTimeout(() => {
+                          window.location.href = "index.html";
+                        }, 2000);
+                      })
+                      .catch((error) => {
+                        alert(
+                          "Sorry can not update the data due to this Error-->" +
+                            error.message
+                        );
+                        setTimeout(() => {
+                          window.location.href = "index.html";
+                        }, 2000);
+                      });
+                  } else {
+                    setTimeout(() => {
+                      window.location.href = "index.html";
+                    }, 2000);
+                  }
+                });
+            }
+            //adding Delete Form--->>>
+            else if (e.target.classList.contains("bt_Delete")) {
+              //Renderring the Delete Modal--->>>
+              document.getElementById("mdl_Delete").style.display = "block";
+              //Delete the data from the database--->>>
+              document
+                .getElementById("delete_Data_Form")
+                .addEventListener("submit", (elem) => {
+                  elem.preventDefault();
+                  const delete_Data = new FormData(elem.target);
+                  delete_Data.append("Sno", rowID);
+                  let userConfirm = confirm(
+                    "Finalise!!! This action will delete the data permanently!!!"
+                  );
+                  if (userConfirm) {
+                    //Sending delete request--->>>
+                    fetch("dataDelete.php", {
+                      method: "POST",
+                      body: delete_Data,
+                    })
+                      .then((response) => {
+                        if (!response.ok) {
+                          return response.json().then((errorData) => {
+                            throw new Error(JSON.stringify(errorData));
+                          });
+                        }
+                        return response.json();
+                      })
+                      .then((data) => {
+                        alert("Data Deleted Successfully" + data);
+                        setTimeout(() => {
+                          window.location.href = "index.html";
+                        }, 2000);
+                      })
+                      .catch((error) => {
+                        alert(
+                          "Unable to delete data!!! due to this--->" +
+                            error.message
+                        );
+                        setTimeout(() => {
+                          window.location.href = "index.html";
+                        }, 2000);
+                      });
+                    //Vanishing the delete Modal
+                    document.getElementById("mdl_Delete").style.display =
+                      "none";
+                  } else {
+                    setTimeout(() => {
+                      window.location.href = "index.html";
+                    }, 2000);
+                  }
+                });
+            } else {
+              // for debugging purpose!!!
+              // console.log(e.target);
+
+              //keeping the modals hidden--->>>
+              document.getElementById("mdl_Edit").style.display = "";
+              document.getElementById("mdl_Delete").style.display = "";
+            }
+          });
+      }
+    })
+    .catch((error) => {
+      alert("Sorry, could not add data due to this error: " + error.message);
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 2000);
+    });
+}
+//Renderring the data in the webpage-->>
+document.getElementById("show_Data").addEventListener("click", (elem) => {
+  const rndr = elem.target;
+  if (rndr.innerText == "Show Table") {
+    //load and render the data-->
+    loadData();
     //transform the button-->
     rndr.style.backgroundColor = "black";
     rndr.style.color = "white";
@@ -133,7 +233,7 @@ document.getElementById("show_Data").addEventListener("click", (elem) => {
     rndr.style = "";
     rndr.innerText = "Show Table";
   } else {
-    alert("If Else ladded Problem please check the code!!!");
+    alert("If Else ladder Problem please check the code!!!");
     rndr.style = "";
     rndr.innerText = "Show Table";
   }
