@@ -65,157 +65,184 @@ function loadData() {
         document.getElementById("mytab").querySelector("tbody").innerHTML +=
           row;
       });
-      //renderring the modals for edit and delete buttons of each row
-      if (document.getElementById("mytab").querySelector("tbody").innerHTML) {
-        document
-          .getElementById("mytab")
-          .querySelector("tbody")
-          .addEventListener("click", (e) => {
-            // for debugging purpose!!!
-            // if (e.target) {
-            //   console.log("pappu");
-            // }
-            //Finding out the id of the targetted row--->>>
-            let rowID = e.target
-              .closest("tr")
-              .querySelector(".sno_Dynamic").innerText;
-            //Adding the edit Form--->>>
-            if (e.target.classList.contains("bt_Edit")) {
-              //Renderring the Edit Modal--->>>
-              document.getElementById("mdl_Edit").style.display = "block";
-              //Sending the data to the server for Updation--->>>
-              document
-                .getElementById("edit_Data_Form")
-                .addEventListener("submit", (elem) => {
-                  elem.preventDefault();
-                  const edit_Data = new FormData(elem.target);
-                  edit_Data.append("Sno", rowID);
-                  let userConfirm = confirm("Ensure Submission!!!");
-                  if (userConfirm) {
-                    //For debugging purpose!!!
-                    // edit_Data.entries().forEach(([key, value]) => {
-                    //   console.log(key + " " + value);
-                    // });
-
-                    //Debugger Fetch method!!!
-                    // fetch("dataUpdate.php", {
-                    //   method: "POST", // Use POST instead of PATCH for testing
-                    //   body: edit_Data,
-                    // })
-                    //   .then((response) => response.text()) // Get the raw response (not JSON)
-                    //   .then((data) => {
-                    //     console.log(data); // Log the raw response from PHP
-                    //     alert("Data sent successfully. Check console.");
-                    //   })
-                    //   .catch((error) => {
-                    //     alert("Error: " + error.message);
-                    //   });
-
-                    //Sending data to the Server--->>>
-                    fetch("dataUpdate.php", {
-                      method: "POST",
-                      body: edit_Data,
-                    })
-                      .then((response) => {
-                        if (!response.ok) {
-                          return response.json().then((errorData) => {
-                            throw new Error(JSON.stringify(errorData));
-                          });
-                        }
-                        return response.json();
-                      })
-                      .then((data) => {
-                        alert("Data Updated successfully" + data.msg);
-                        setTimeout(() => {
-                          window.location.href = "index.html";
-                        }, 2000);
-                      })
-                      .catch((error) => {
-                        alert(
-                          "Sorry can not update the data due to this Error-->" +
-                            error.message
-                        );
-                        setTimeout(() => {
-                          window.location.href = "index.html";
-                        }, 2000);
-                      });
-                  } else {
-                    setTimeout(() => {
-                      window.location.href = "index.html";
-                    }, 2000);
-                  }
-                });
-            }
-            //adding Delete Form--->>>
-            else if (e.target.classList.contains("bt_Delete")) {
-              //Renderring the Delete Modal--->>>
-              document.getElementById("mdl_Delete").style.display = "block";
-              //Delete the data from the database--->>>
-              document
-                .getElementById("delete_Data_Form")
-                .addEventListener("submit", (elem) => {
-                  elem.preventDefault();
-                  const delete_Data = new FormData(elem.target);
-                  delete_Data.append("Sno", rowID);
-                  let userConfirm = confirm(
-                    "Finalise!!! This action will delete the data permanently!!!"
-                  );
-                  if (userConfirm) {
-                    //Sending delete request--->>>
-                    fetch("dataDelete.php", {
-                      method: "POST",
-                      body: delete_Data,
-                    })
-                      .then((response) => {
-                        if (!response.ok) {
-                          return response.json().then((errorData) => {
-                            throw new Error(JSON.stringify(errorData));
-                          });
-                        }
-                        return response.json();
-                      })
-                      .then((data) => {
-                        alert("Data Deleted Successfully" + data);
-                        setTimeout(() => {
-                          window.location.href = "index.html";
-                        }, 2000);
-                      })
-                      .catch((error) => {
-                        alert(
-                          "Unable to delete data!!! due to this--->" +
-                            error.message
-                        );
-                        setTimeout(() => {
-                          window.location.href = "index.html";
-                        }, 2000);
-                      });
-                    //Vanishing the delete Modal
-                    document.getElementById("mdl_Delete").style.display =
-                      "none";
-                  } else {
-                    setTimeout(() => {
-                      window.location.href = "index.html";
-                    }, 2000);
-                  }
-                });
-            } else {
-              // for debugging purpose!!!
-              // console.log(e.target);
-
-              //keeping the modals hidden--->>>
-              document.getElementById("mdl_Edit").style.display = "";
-              document.getElementById("mdl_Delete").style.display = "";
-            }
-          });
-      }
+      //renderring the modals for edit and delete buttons of each row--->>>
+      modal_Rendering();
     })
     .catch((error) => {
-      alert("Sorry, could not add data due to this error: " + error.message);
+      alert("Sorry, unable to fetch data due to this error: " + error.message);
       setTimeout(() => {
         window.location.href = "index.html";
       }, 2000);
     });
 }
+
+//sending edit request to the server--->>>
+function edit_Request(obj) {
+  //Debugger Fetch method!!!
+  // fetch("dataUpdate.php", {
+  //   method: "POST", // Use POST instead of PATCH for testing
+  //   body: edit_Data,
+  // })
+  //   .then((response) => response.text()) // Get the raw response (not JSON)
+  //   .then((data) => {
+  //     console.log(data); // Log the raw response from PHP
+  //     alert("Data sent successfully. Check console.");
+  //   })
+  //   .catch((error) => {
+  //     alert("Error: " + error.message);
+  //   });
+
+  fetch("dataUpdate.php", {
+    method: "POST",
+    body: obj,
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((errorData) => {
+          throw new Error(JSON.stringify(errorData));
+        });
+      }
+      return response.json();
+    })
+    .then((data) => {
+      alert("Data Updated successfully" + data.msg);
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 2000);
+    })
+    .catch((error) => {
+      alert(
+        "Sorry can not update the data due to this Error-->" + error.message
+      );
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 2000);
+    });
+}
+
+//sending delete reuqest to the server--->>>
+function delete_Request(obj) {
+  fetch("dataDelete.php", {
+    method: "POST",
+    body: obj,
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((errorData) => {
+          throw new Error(JSON.stringify(errorData));
+        });
+      }
+      return response.json();
+    })
+    .then((data) => {
+      alert("Data Deleted Successfully" + data);
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 2000);
+    })
+    .catch((error) => {
+      alert("Unable to delete data!!! due to this--->" + error.message);
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 2000);
+    });
+}
+
+//adding the functionalities of the modal--->>>
+function modal_Rendering() {
+  if (document.getElementById("mytab").querySelector("tbody").innerHTML) {
+    document
+      .getElementById("mytab")
+      .querySelector("tbody")
+      .addEventListener("click", (e) => {
+        // for debugging purpose!!!
+        // if (e.target) {
+        //   console.log(e.target);
+        // }
+
+        //Finding out the id of the targetted row--->>>
+        let rowID = e.target
+          .closest("tr")
+          .querySelector(".sno_Dynamic").innerText;
+        //Adding the edit Form--->>>
+        if (e.target.classList.contains("bt_Edit")) {
+          //Renderring the Edit Modal--->>>
+          document.getElementById("mdl_Edit").style.display = "block";
+          //Sending the data to the server for Updation--->>>
+          document
+            .getElementById("edit_Data_Form")
+            .addEventListener("submit", (elem) => {
+              elem.preventDefault();
+              const edit_Data = new FormData(elem.target);
+              edit_Data.append("Sno", rowID);
+              let userConfirm = confirm("Ensure Submission!!!");
+              if (userConfirm) {
+                //For debugging purpose!!!
+                // edit_Data.entries().forEach(([key, value]) => {
+                //   console.log(key + " " + value);
+                // });
+
+                //Sending data to the Server--->>>
+                edit_Request(edit_Data);
+              } else {
+                setTimeout(() => {
+                  window.location.href = "index.html";
+                }, 2000);
+              }
+            });
+
+          //Vanish the edit modal in case of accidental click--->>>
+          document
+            .getElementById("bt_Edit_Cancel")
+            .addEventListener("click", (ele) => {
+              ele.preventDefault();
+              document.getElementById("mdl_Edit").style.display = "";
+            });
+        }
+        //adding Delete Form--->>>
+        else if (e.target.classList.contains("bt_Delete")) {
+          //Renderring the Delete Modal--->>>
+          document.getElementById("mdl_Delete").style.display = "block";
+          //Delete the data from the database--->>>
+          document
+            .getElementById("delete_Data_Form")
+            .addEventListener("submit", (elem) => {
+              elem.preventDefault();
+              const delete_Data = new FormData(elem.target);
+              delete_Data.append("Sno", rowID);
+              let userConfirm = confirm(
+                "Finalise!!! This action will delete the data permanently!!!"
+              );
+              if (userConfirm) {
+                //Sending delete request--->>>
+                delete_Request(delete_Data);
+                //Vanishing the delete Modal
+                document.getElementById("mdl_Delete").style.display = "none";
+              } else {
+                setTimeout(() => {
+                  window.location.href = "index.html";
+                }, 2000);
+              }
+            });
+          //vanishing the delete modal for accidental click--->>>
+          document
+            .getElementById("bt_Delete_Cancel")
+            .addEventListener("click", (ele) => {
+              ele.preventDefault();
+              document.getElementById("mdl_Delete").style.display = "";
+            });
+        } else {
+          // for debugging purpose!!!
+          // console.log(e.target);
+
+          //keeping the modals hidden--->>>
+          document.getElementById("mdl_Edit").style.display = "";
+          document.getElementById("mdl_Delete").style.display = "";
+        }
+      });
+  }
+}
+
 //Renderring the data in the webpage-->>
 document.getElementById("show_Data").addEventListener("click", (elem) => {
   const rndr = elem.target;
